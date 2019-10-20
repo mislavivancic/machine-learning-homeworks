@@ -1,5 +1,6 @@
 #####1#####
-(c) Q: Gore definirana funkcija pogreške 𝐸(ℎ|D) i funkcija srednje kvadratne
+(c)
+Q: Gore definirana funkcija pogreške 𝐸(ℎ|D) i funkcija srednje kvadratne
 pogreške nisu posve identične. U čemu je razlika? Koja je "realnija"?
 
 A: Gore definirana funkcija pogreške ima mnogo veće vrijednosti, dok druga
@@ -7,8 +8,9 @@ funkcija radi srednju vrijednost svih grešaka, stoga je ona realnija jer radi
 prosjek grešaka cijelog modela.
 
 
-(d) Uvjerite se da za primjere iz D težine 𝐰 ne možemo naći rješavanjem
-sustava 𝐰=𝚽^−1𝐲, već da nam doista treba pseudoinverz.
+(d)
+Uvjerite se da za primjere iz D težine 𝐰 ne možemo naći rješavanjem sustava
+𝐰=𝚽^−1𝐲, već da nam doista treba pseudoinverz.
 Q: Zašto je to slučaj? Bi li se problem mogao riješiti preslikavanjem primjera
  u višu dimenziju? Ako da, bi li to uvijek funkcioniralo, neovisno o skupu
   primjera D? Pokažite na primjeru.
@@ -17,4 +19,125 @@ A: Nije moguće naći inverz matrice koja nije kvadratna, a FI često nije
 kvadratna matrica. Moguće je dobitni kvadratnu matricu preslikavanjem primjera
 u višu dimenziju, ali onda je i potrebno imati jednak broj primjera i
 preslikanih broja značajki, te kada bi N bio puno veći m + 1 bi trebao biti isto
-velik. Zbog toga se radi pseudoinverz koji mora biti kvadratna matrica.
+velik. Zbog toga se radi pseudoinverz koji sadrži i Gramovu matricu za koju
+postoji inverz.
+
+
+
+#####3#####
+(a)
+Q: Koji model ima najmanju pogrešku učenja i zašto? (predict se radi na X_train)
+
+A: Najmanju pogrešku učenja ima model sa najvećim stupnjem polinoma, zato što
+on ima najveći kapacitet, ali je zapravo prenaučen i nebi dobro radio na
+neviđenim podacima.
+
+(b)
+Q: Je li rezultat u skladu s očekivanjima? Koji biste model odabrali i zašto?
+
+A: U skladu je s očekivanjima, zato što modeli sa velikim stupnjevima polinoma
+radi skoro savršeno na viđenim podacima, ali je presložen i loše generalizira.
+Dok kod manje složenih modela može biti problem to što nema dovoljan kapacitet,
+ali bolje generalizira.
+
+Q: Pokrenite iscrtavanje više puta. U čemu je problem? Bi li problem bio
+jednako izražen kad bismo imali više primjera? Zašto?
+
+A: Koji problem?!
+
+(c)
+Q: Jesu li rezultati očekivani? Obrazložite.
+
+A: Jesu heh. Zato što sa većom Sigmom pogreške su veće, također za veći broj
+primjera pogreške su veće.
+
+
+#####4#####
+(a)
+Q: Kojih je dimenzija matrica koju treba invertirati?
+
+A: Matrica je kvadratna, tj konkretno 4x4
+
+Q: Po čemu se razlikuju dobivene težine i je li ta razlika očekivana?
+Obrazložite.
+
+A: Težine se razlikuju po iznosima, odnosno što je veća lambda, to je manji
+iznos težina. Neke od težina su se smanjile gotovo na 0. Smisao je kazniti
+hipoteze sa velikim težinama.
+
+
+#####5#####
+(a)
+Q: Jesu li rezultati očekivani? Obrazložite.
+
+A: Jesu. Manji stupanj polinoma tj d=2 predstavlja gotovo ravne linije tj. ima
+manju složenost, dok d=10 predstavlja složenije krivulje.
+
+(b)
+Q: Kojoj strani na grafikonu odgovara područje prenaučenosti, a kojoj
+podnaučenosti? Zašto?
+
+A: Nezz
+
+
+Q: Koju biste vrijednosti za 𝜆 izabrali na temelju ovih grafikona i zašto?
+
+A: nezz
+
+
+#####6#####
+(a)
+Q: Objasnite oblik obiju krivulja. Hoće li krivulja za ‖𝐰‖2 doseći nulu? Zašto?
+Je li to problem? Zašto?
+
+A: Norme težina sa većom lambdom sve su manje i manje, ali krivulja ||W||2 ne
+dosegne nulu što je problem jer ne stvara rijetke modele.
+
+
+Q: Za 𝜆=100, koliki je postotak težina modela jednak nuli, odnosno koliko je
+model rijedak?
+
+A: Niti jedna težina nije 0, stoga model uopće nije rijedak.
+
+(b)
+Uglavnom ovdje koristimo L1 regularizaciju (LASSO), pa dobivamo težine
+postavljene na 0, tj dobivamo rijetki model.
+
+
+
+#####7#####
+(b)
+Q: Gledajući grafikone iz podzadatka (a), koja značajka bi trebala imati veću
+magnitudu, odnosno važnost pri predikciji prosjeka na studiju? Odgovaraju li
+težine Vašoj intuiciji? Objasnite.
+
+A: Exam score bi trebao imati veću magnitudu. Težine odgovaraju tome, budući da
+je težina na exam score veća.
+
+
+
+#####8#####
+(a)
+Q: Usporedite iznose težina s onima koje ste dobili u zadatku 7b. Što se
+dogodilo?
+
+A: Duplicirane težine za ocjene iz srednje škole, sada su puno manje, gotovo 0.
+
+(b)
+Q: Kako regularizacija utječe na stabilnost težina?
+
+A: Što je veća regularizacija, standardna devijacija je manja, tj. stabilnost
+je veća.
+
+Q: Jesu li koeficijenti jednakih magnituda kao u prethodnom pokusu?
+Objasnite zašto.
+
+A: Pa ono. Za lambdu=0.01 su gotovo isti, jer je stupanj regularizacije manji,
+a za lambdu=1000 su dosta manji.
+
+
+(c)
+Q: Kako regularizacija utječe na kondicijski broj matrice 𝚽⊺𝚽+𝜆𝐈?
+
+A: Što je veći stupanj regularizacije, to je kondicijski broj manji. A što je
+kondicijski broj veći, rješenje je nestabilno tj. to dovodi do prenaučenosti.
