@@ -1,0 +1,20 @@
+#####1#####
+(c) Q: Gore definirana funkcija pogreške 𝐸(ℎ|D) i funkcija srednje kvadratne
+pogreške nisu posve identične. U čemu je razlika? Koja je "realnija"?
+
+A: Gore definirana funkcija pogreške ima mnogo veće vrijednosti, dok druga
+funkcija radi srednju vrijednost svih grešaka, stoga je ona realnija jer radi
+prosjek grešaka cijelog modela.
+
+
+(d) Uvjerite se da za primjere iz D težine 𝐰 ne možemo naći rješavanjem
+sustava 𝐰=𝚽^−1𝐲, već da nam doista treba pseudoinverz.
+Q: Zašto je to slučaj? Bi li se problem mogao riješiti preslikavanjem primjera
+ u višu dimenziju? Ako da, bi li to uvijek funkcioniralo, neovisno o skupu
+  primjera D? Pokažite na primjeru.
+
+A: Nije moguće naći inverz matrice koja nije kvadratna, a FI često nije
+kvadratna matrica. Moguće je dobitni kvadratnu matricu preslikavanjem primjera
+u višu dimenziju, ali onda je i potrebno imati jednak broj primjera i
+preslikanih broja značajki, te kada bi N bio puno veći m + 1 bi trebao biti isto
+velik. Zbog toga se radi pseudoinverz koji mora biti kvadratna matrica.
