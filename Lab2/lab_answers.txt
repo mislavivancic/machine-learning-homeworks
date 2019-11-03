@@ -1,0 +1,150 @@
+#####1#####
+(a)
+Q: Kako bi bila definirana granica između klasa ako bismo koristili oznake klasa
+ −1 i 1 umjesto 0 i 1?
+
+A: Granica bi bila definirana h(x)>=0.0
+
+(b)
+Q: Zašto model ne ostvaruje potpunu točnost iako su podatci linearno odvojivi?
+
+A: Zato što linearno diskriminativni modeli, zbog svoje fukcije gubitka, koja je
+kvadratna, kažnjavaju i dobro označene primjere. Takvi modeli su nerobusni na
+vrijednosti koje odskaču.
+
+(c)
+Q: Očito je zašto model nije u mogućnosti postići potpunu točnost na ovom skupu
+podataka. Međutim, smatrate li da je problem u modelu ili u podacima?
+Argumentirajte svoj stav.
+
+A: Model nije mogao odvojiti podatke koji su linearno neodvojivi. Problem s
+podacima je to što su linearno neodvojivi, a problem u modelu je što nije
+dovoljno složen.
+
+
+#####2#####
+Q: Alternativna shema jest ona zvana jedan-naspram-jedan(engl, one-vs-one, OVO).
+Koja je prednost sheme OVR nad shemom OVO? A obratno?
+
+A: OVO koristi (K povrh 2) binarnih klasifikatora, dok OVR koristi K binarnih
+klasifikatora. Problem kod OVR-a je to što, je moguće da dođe do disbalansa
+broja klasa, odnosno pozitivnih klasa će generalno biti puno manje od zbroja
+ostalih klasa.
+
+
+#####3#####
+(a)
+Q: Zašto je sigmoidalna funkcija prikladan izbor za aktivacijsku funkciju
+poopćenoga linearnog modela?
+
+A: Prikladan je izbor zato što ima probabilističku interpretaciju. Također
+derivabilna je.
+
+
+Q: Kakav utjecaj ima faktor 𝛼 na oblik sigmoide? Što to znači za model
+logističke regresije (tj. kako izlaz modela ovisi o normi vektora težina 𝐰)?
+
+A: Što je veći faktor alpha to je sigmoida strmija, tj brže prelazi iz 0 u 1.
+Što je veća norma vektora težina w, to je sigmoida strmija, a to ujedno znači
+da za neki mali pomak h(x,w) će model pojedini primjerak pomaknuti ili u 1 ili
+u 0.
+
+(c)
+Q: Koji kriterij zaustavljanja je aktiviran?
+
+A: Broj iteracija je dosegnuo maksimalan broj. Dok za neke druge stope učenja
+kriterij zaustavljanja bude zbog smanjenja unkarsne pogreše između iteracija.
+U principu za veće stope učenja model brže konvergira, no mogu će je da i ne
+nađe minimum zbog divergencije, dok za male stope učenja presporo dođe u
+minimum.
+________________________________________________________________________________
+
+Q: Zašto dobivena pogreška unakrsne entropije nije jednaka nuli?
+
+A: Zbog svojstva sigmoide. Sigmoida tek u + beskonačnosti postaje 1, a 0 tek u
+- beskonačnosti. Stoga niti jedan primjerak nije 100% točan. I uvijek postoji
+barem neka greška.
+________________________________________________________________________________
+
+Q: Kako biste utvrdili da je optimizacijski postupak doista pronašao hipotezu
+koja minimizira pogrešku učenja? O čemu to ovisi?
+
+A: Ili kada bi unakrsna pogreška prestala padati, ili kada bi pala na neku
+malu vrijednost. Tj. kada bi optimizacija konvergirala.
+________________________________________________________________________________
+
+Q: Na koji način biste preinačili kôd ako biste htjeli da se optimizacija izvodi
+stohastičkim gradijentnim spustom (online learning)?
+
+A: Za svaki primjerak bi se težine mijenjale, a ne tek nakon prolaska kroz sve
+primjerke. Tj. nakon izračuna funkcije pogreške za jedan primjerak težine bi
+se ažurirale.
+
+
+(d)
+Q: Zašto je pogreška unakrsne entropije veća od pogreške klasifikacije? Je li to
+uvijek slučaj kod logističke regresije i zašto?
+
+A: Veća je zato što sigmoida nikada neće prijerak staviti točno u 1, odnosno u 0,
+pa će uvijek postojati neka greška. Dok kod pogreške klasifikacije ili je
+primjerak točno klasificiran ili nije.
+________________________________________________________________________________
+
+
+Q: Koju stopu učenja 𝜂 biste odabrali i zašto?
+
+A: VaLda najveću jer najbrže dođe do minimuma.
+
+
+
+
+#####4#####
+(a)
+Q: Zašto se rezultat razlikuje od onog koji je dobio model klasifikacije
+linearnom regresijom iz prvog zadatka?
+
+A: Razlog leži u funkciji pogreške. U linearnoj regresiji se kažnjavaju ispravno
+klasificirani primjerci, dok u logističkoj regresiji, jako ispravni primjerci
+se gotovo uopće ne kažnjavaju.
+
+(c)
+Q: Usporedite grafikone za slučaj linearno odvojivih i linearno neodvojivih
+primjera te komentirajte razliku.
+
+A: Ne razliku se previše, osim što težine postaju manje, za linearno neodvojive
+primjerke.
+
+
+#####5#####
+(a)
+Q: Jesu li izgledi krivulja očekivani i zašto?
+
+A: Jesu. Za najveću regularizaciju unakrsna greška je najveća, budući da se
+provodi na primjerima za učenje, pa model nije toliko složen, dok za malu
+regularizaciju pogreška se smanjuje jer je model složeniji i bolje se
+prilagođuje primjerima za učenje.
+Što se tiče težina, regularizirane težine su manje od neregulariziranih.
+________________________________________________________________________________
+
+Q: Koju biste vrijednost za 𝛼 odabrali i zašto?
+
+A: Pa nezz, treba vidjet koji aplha daje najmanju grešku na neviđenim podacima.
+
+
+
+#####6#####
+Q: Koji biste stupanj polinoma upotrijebili i zašto? Je li taj odabir povezan s
+odabirom regularizacijskog faktora 𝛼? Zašto?
+
+A: I jedan i drugi stupanj polinoma dobro klasificiraju primjerke, ali bolje
+je imati manji stupanj polinoma ako i dalje dobro klasificira. 
+
+
+
+
+
+
+
+
+
+k
