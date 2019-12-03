@@ -1,0 +1,200 @@
+################## 1 ##################
+a)
+Q: Koliko iznosi širina margine i zašto?
+A: Širina margine iznosi približno 1. To predstavlja maksimalnu udaljenost
+od najbližih primjera lijevo i desno (potpornih vektora). Udaljenost se 
+računa kao d = h(x)/||w||
+
+Q: Koji primjeri su potporni vektori i zašto?
+A: To su primjeri koji sami čine granicu, odnosno oni primjeri koji se nalaze
+na samoj margini. Zbog ograničenja da su najbliži primjeri udaljeni za 1. 
+Tako da zbog uvijeta alfa*(y*h(x)-1)=0,u predikciji h(x)=suma(alfa*y_i*xT*x_i) + w0
+Za ostale primjere vrijedi da su udaljeniji od 1, pa je njihov alfa=0 kako bi
+se zadovoljio uvijet.
+
+
+c)
+Q: Kako stršeća vrijednost utječe na SVM?
+A: Ne utječe nikako, budući da samo primjeri na margini utječu na model.
+Ne utječu zato što primjeri iza margine (ondosno ispravno klasificirani), 
+rezultiraju gubitkom 0. 
+
+Q: Kako se linearan SVM nosi s linearno neodvojivim skupom podataka?
+A: Pa gubi na točnosti, budući da ne može linearno odvojiti...
+Također primjećujem da se širina margine povećala na otprilike 1.5.
+
+
+################## 2 ##################
+
+Što je C veći to je margina tvrđa, tj više kažnjava primjere unutar margine.
+Pa što je C veći model je složeniji. A gamma što je veća primjeri su međusobno 
+različitiji, pa to može dovesti do prenaučenosti.
+Što je preciznost(gamma) veća, C treba biti manji, tj. treba jače
+regularizirati model.
+
+
+################## 3 ##################
+Q: Razlikuje li se površina pogreške na skupu za učenje i skupu za ispitivanje?
+Zašto?
+
+A: U primjeru sa značajkama u 2 dimenzije. Test error je sličan train erroru,
+ali svejedno malo viši. (Svijetlija područja predstavljaju maju grešku). Dakle,
+model dobro generalizira, odnosno optimizacija rezultira hiperparametrima koji
+dobro predviđaju na test setu.
+U primjeru sa značajkama u 100 dimenzija, test error je puno veći od train
+errora. Mijenjanje gamme u test erroru baš i ne utječe previše na poboljšanje 
+točnosti. Mislim da je to zbog toga što primjeri imaju 100 značajki i samim 
+time su manje sličniji, još kada povećamo preciznost ni jedan primjer si neće
+biti sličan. Jedino što pomaže je C. Na train setu taj C što je veći trebala
+bi biti manja pogreška. Ali naravno da što je veći C, model je složeniji, pa
+će loše predviđati na test setu. **Valda**
+
+
+Q: U prikazu površine pogreške, koji dio površine odgovara prenaučenosti, a koji
+podnaučenosti? Zašto?
+
+A: Mislim da tamo di je najsvijetlije na test setu označava di je optimum modela,
+a kod test seta dole lijevo, gdje je najmanji C i najmanji gamma tamo je 
+podnaučenost, a tamo di je najveći C i najveći gamma prenaučenost.
+
+
+Q: Kako broj dimenzija 𝑛 utječe na površinu pogreške, odnosno na optimalne 
+hiperparametre (𝐶∗,𝛾∗)?
+
+A: U prvom primjeru opt_C = 1, opt_gamma = 8, dok u drugom primjeru sa 100 
+značajki  opt_C = 2, opt_gamma = 0.000488. Iz toga možemo vidjeti da se gamma
+smanjuje sa veličinom dimenzije, a C se malo povećao.
+
+
+
+Q: Preporuka je da povećanje vrijednosti za 𝛾 treba biti popraćeno smanjenjem 
+vrijednosti za 𝐶. Govore li vaši rezultati u prilog toj preporuci? Obrazložite. 
+
+A: Pa to se može vidjeti iz optimalnih vrijednosti tih parametara navednih u
+prošlom odgovoru. Što je veći C to je manji gamma i obrnuto.
+
+
+
+################## 4 ##################
+b)
+Q: Kako radi ovo skaliranje?
+A: Raspoređuje vrijednosti u intervalu [0,1]
+
+
+Q: Dobiveni histogrami su vrlo slični. U čemu je razlika? 
+A: Neskalirane vrijednosti i minMax skalirane vrijednosti izgledaju isto,
+ali zapravo vrijednosti kod minMax skaliranja su raspoređene u intervalu [0,1].
+Sami odnos tih vrijednosti se nije zapravo promijenio pa grafovi izgledaju isto
+na prvu.
+
+
+c)
+Q: Kako radi ovo skaliranje?
+A: Centrira vrijednosti oko medijana, a njihov otklon od tog medijana jednak 
+je iznosu standardne devijacije.
+
+
+Q: Dobiveni histogrami su vrlo slični. U čemu je razlika? 
+A: Ne vidim baš kako su slični...
+
+d)
+Q: Jesu li rezultati očekivani? Obrazložite.
+A: Očekivao sam da će standardno skaliranje biti najbolje, što se i pokazalo.
+Ali zašto je minMax gori od neskaliranih podataka nisam siguran. Možda što su
+i dalje jedne značajke lijevo, a druge desno kao i kod neskaliranih, samo 
+što ovaj put su na manjem intervalu, pa se možda izgubila preciznost.
+
+
+
+
+Q: Bi li bilo dobro kada bismo funkciju fit_transform primijenili na 
+cijelom skupu podataka? Zašto?
+A: Mislim da nema smisla na svim podacima koristiti fit_transform, budući
+da model treniramo samo na train podacima, pa nam je korisnije koristiti
+samo to skaliranje u odnosu na train set.
+
+
+Q: Bi li bilo dobro kada bismo tu funkciju primijenili zasebno na skupu za
+učenje i zasebno na skupu za ispitivanje? Zašto?
+A: Opet mislim da ne. Ako se držimo toga da iz train seta učimo, onda istu 
+skalu koju imamo na train setu trebamo koristiti i na test setu. 
+
+
+################## 5 ##################
+
+U fit metodi, zapravo se ne odvija nekakvo učenje nego samo postavljamo te 
+"susjede". 
+I onda predikcija se odvija na način da gledamo koje su oznake najbližih k susjeda.
+
+
+
+################## 6 ##################
+a)
+Q: Kako 𝑘 utječe na izgled granice između klasa?
+A: Kad je k=1 dobijemo više izdvojenih područja. Dok sa većim k lijeva strana 
+većinom pripada jednoj klasi . Možemo reći da je granica glađa
+
+
+Q: Kako se algoritam ponaša u ekstremnim situacijama: 𝑘=1 i 𝑘=100?
+A: Kad je k=1 model je prenaučen jer gleda samo jednog najbližeg susjeda,
+a kada je k=100 model je prejednostavan, jer u ovom slučaju pogleda sve primjere
+jer ih je ukupno 100.
+
+
+b)
+Q: Kako se mijenja optimalna vrijednost hiperparametra 𝑘 s obzirom na broj 
+primjera 𝑁? Zašto?
+A: Raste. Pa možda, zato što ako imamo više primjera (N) model je složeniji, 
+jer samim time ima i više parametara. Pa ga želimo pojednostaviti gledajući
+veći broj susjeda.
+
+
+Q: Kojem području odgovara prenaučenost, a kojem podnaučenost modela? 
+Zašto?
+A: Vidi se na slici. U test erroru.
+
+
+
+Q: Je li uvijek moguće doseći pogrešku od 0 na skupu za učenje?
+A: Da kada je k=1, onda je sličnost podatka iz skupa na učenje najbliži samom
+sebi i automatski uzima njegovu oznaku.
+
+
+
+c)
+Q: Je li algoritam k-najbližih susjeda osjetljiv na nebitne značajke? 
+Zašto?
+A: Je, greška mu je veća sa nebitnim značajkama. Pa značajke koje su nam nebitne
+svejedno sudjeluju u predikciji, tj. njih također uspoređujemo sa drugim nebitnim
+značajkama i onda nam predikcija ovisi o tim nebitnim značajkama i samim time je 
+manja preciznost.
+
+Q: Je li ovaj problem izražen i kod ostalih modela koje smo dosad 
+radili (npr. logistička regresija)?
+A: Je. Zbog nebitnih značajki dobivamo bespotrebno složenije modele, koji čine
+veću grešku na neviđenim primjerima.
+
+
+
+Q: Kako bi se model k-najbližih susjeda ponašao na skupu podataka sa 
+značajkama različitih skala? Detaljno pojasnite.
+A: Ako je veća skala neke značajke. Samim time bit će i veća npr euklidska 
+udaljenost, pa će primjeri bit više udaljeni samo ako im se ta značajka sa 
+velikom skalom čak i malo razlikuje.
+
+
+
+################## 7 ##################
+Q: Pokušajte objasniti razlike u rezultatima. Koju biste od ovih dviju 
+mjera koristili za klasifikaciju visokodimenzijskih podataka?
+A: Euklidska udaljenost se povećeva povećavanjem udaljenosti između
+primjera, samim time primjeri su udaljeniji i time se gube razlike između
+primjera. Dok kod kosinusna udaljenost predstavlja kosinus kuta između 
+dvije točke, što će biti ograničena vrijednost , a i također kut ne raste zbog
+povećane udaljenosti između točaka. Koristio bi kosinusnu udaljenost jer ne
+raste s povećanjem dimenzionalnosti.
+
+
+Q: Zašto je ovaj problem osobito izražen kod algoritma k-najbližih susjeda?
+A: Pa valjda zato što se u tom algoritmu koristi sličnost za predikciju,
+a često se koristi euklidska udaljenost.
