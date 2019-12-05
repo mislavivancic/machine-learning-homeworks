@@ -197,4 +197,5 @@ raste s povećanjem dimenzionalnosti.
 
 Q: Zašto je ovaj problem osobito izražen kod algoritma k-najbližih susjeda?
 A: Pa valjda zato što se u tom algoritmu koristi sličnost za predikciju,
-a često se koristi euklidska udaljenost.
+a često se koristi euklidska udaljenost.Vrijednosti jezgrenih funkcija za sve 
+parove primjera iz skupa za učenje D možemo izračunati
