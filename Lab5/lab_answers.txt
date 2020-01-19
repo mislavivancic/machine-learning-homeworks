@@ -1,0 +1,266 @@
+############### 1 ###############
+(a)
+Q: Koju zajedničku vjerojatnosnu razdiobu ova mreža modelira?
+ Kako tu informaciju očitati iz mreže?
+
+A: Zajednička vjerojatnosna razdioba:
+p(c,s,r,w) = p(c)*p(s|c)*p(r|c)*p(w|s,r)
+Graf se crta tako da bridovi idu iz varijable koja uvjetuje prema varijabli koja je uvjetovana.
+Dakle u p(s|c) brid ide iz c u s.
+
+Q: U zadatku koristimo egzaktno zaključivanje. Kako ono radi?
+
+A: Egzaktno zaključivanje koristi bayesovo pravilo. Dakle gledamo primjerice
+p(s=1|w=1) = p(s=1,w=1)/p(w=1). Sada je potrebno marginalizirati brojnik i nazivnik.
+Dakle brojnik je suma po svim c,r => p(c)*p(s=1|c)*p(r|c)*p(w=1|s=1,r),
+a nazivnik je suma po svim c,s,r => p(c)*p(s|c)*p(r|c)*p(w=1|s,r),
+
+
+Q: Koja je razlika između posteriornog upita i MAP-upita?
+A: MAP računa Xq =  argmax[Xq]suma po Xn od p(Xq,Xo,Xn) 
+MAP-upiti – najvjerojatnija vrijednost varijabli upita.
+
+A posteriorni upit računa p(Xq|Xo) = (suma po Xn od p(Xq,Xo,Xn))/(suma po Xn,Xq od p(Xq,Xo,Xn))
+Posteriorni upit je izračun uvjetne vjerojatnosti.
+
+
+
+Q: Zašto je vjerojatnost 𝑃(𝑐=1) drugačija od 𝑃(𝑐=1|𝑠=1,𝑟=1) 
+ako znamo da čvorovi 𝑆 i 𝑅 nisu roditelji čvora 𝐶? 
+A: Pa logički gledano ako znamo da je upaljena prskalica i da je padala kiša 
+to nam donosi neku novu informaciju o vjerojatnosti da je oblačno. 
+
+
+(b)
+Q: Kako biste svojim riječima opisali ovaj fenomen, koristeći se ovim primjerom?
+
+A: Dakle, kada promatramo 𝑃(s=1|w=1)=0.4298 i 𝑃(r=1|w=1)=0.7079 imamo te vjerojatnosti, 
+no kada osim opažene vjerojatnosti za w  opazimo jednu od r,odnosno s, vjerojatnosti 
+postaju manje tj 𝑃(s=1|r=1,w=1)=0.1945 i 𝑃(r=1|s=1,w=1)=0.3204. Ono što se događa je to
+da opažanje da pada kiša smanjuje vjerojatnost da je trava mokra zbog prskalice. Također
+ako znamo da je prskalica uključena i da je trava mokra to nam smanjuje vjerojatnost 
+da pada kiša.
+
+
+(c)
+Q: Koristeći BayesianModel.is_active_trail provjerite jesu li varijable oblačnosti (𝐶) 
+i mokre trave (𝑊) uvjetno nezavisne. Što mora vrijediti kako bi te dvije varijable 
+bile uvjetno nezavisne? Provjerite korištenjem iste funkcije.
+
+A: 
+# Imamo dva lanca preko S i preko R i buduci na da ni jedan nije opažen 
+# čvorovi su povezani.
+print(model.is_active_trail('C','W')) # True
+
+# Imamo opažen S pa je preko tog lanca nepovezano, ali preko drugog je povezano 
+# pa nije d separirano
+print(model.is_active_trail('C','W', observed='S')) # True
+
+# Ista stvar kao i gore
+print(model.is_active_trail('C','W', observed='R')) # True
+
+# U ovom slučaju svi putevi (preko S, R) su nepovezani pa su C i W d-separirani
+print(model.is_active_trail('C','W',observed=['S', 'R'])) # False
+
+
+
+Q: Kako možemo na temelju grafa saznati koje dvije varijable su, uz neka opažanja,
+uvjetno nezavisne?
+
+A: Dakle svi putevi moraju biti d-separirani pa možemo reći jesu li uvjetno nezavisni
+Račvanje: x<-z->y  ako je z opažen onda su odvojeni(uvjedno nezavisne od z)
+Lanac: x->z->y ako je z opažen onda su odvojeni(uvjedno nezavisne od z)
+Sraz: x->z<-y  ako je z opežen onda su povezani (uvjedno zavisni) 
+
+
+Q: Zašto bismo uopće htjeli znati koje su varijable u mreži uvjetno nezavisne?
+A: Uvođenjem uvjetne nezavisnosti smanjujemo složenost grafa, tj broj bridova 
+između čvorova. Samim time manje računamo 
+
+
+
+
+############### 2 ###############
+(b)
+Q: Na temelju ovog primjera objasnite zašto točnost nije uvijek prikladna metrika.
+
+A: U slučaku kada imamo disbalans klasa, ondosno recimo da imamo 99 primjeraka klase 1 
+i 1 primjerak klase 0. I ako napravimo dummy_classifier koji uvijek vraća 1. Njegova će
+točnost biti 99%. Što bi moglo biti bolje od modela kojeg smo stvarno konstruirali.
+
+
+
+
+Q: Zašto koristimo F1-mjeru?
+Mjera F1 – harmonijska sredina preciznosti i odziva. F1 je otporna na disbalans
+klasa. 
+Preciznost je broj točnih pozitivnih/(broj svih primjera klasificiranih kao točni)
+Odziv je broj točnih pozitivnih/(broj svih zapravo pozitivnih klasificiranih)
+U principu daje bolji uvid u kvalitetu modela u odnosu na ostale mjere.
+
+
+(c)
+Q: Zašto "obična" unakrsna provjera nije dovoljno robusna?
+
+A: Prednost K-struke unakrsne provjere je to što je svaki primjer iskorišten 
+i za učenje i za ispitivanje.
+Nedostatak je što modeli nisu međusobno nezavisni => visoka varijanca procjene.
+
+
+
+
+Q: Što je to stratificirana k-struka unakrsna provjera? Zašto ju često koristimo? 
+
+A: Prednost korištenja je to što generira test setove takve da imaju podjedanku
+distribuciju klasa, ili što je moguće bližu distribuciju.
+
+
+(d)
+Q: Koja se metrika optimira pri ovoj optimizaciji?
+
+A: Mislim da je TOČNOST, zato što u dokumentaciji za gridSearch piše
+da se koristi od estimatora funkcija score, koja je za logističku regresiju
+točnost. Valda.
+
+
+Q: Kako biste odredili broj preklopa 𝑘? 
+
+A: Ima nekoliko pristupa odabiru broja preklopa.
+Bira se takav k za koji je train/test skup podataka dovoljno velik da 
+statistički predstavlja ostatak primjera. Odnosno ne želimo da nam podaci
+ovisno o k-podjeli previše variraju.
+
+Obično se bira k={5,10}, ali ne mora biti tako hehe.
+
+
+(e)
+Q: Kako biste odabrali koji su hiperparametri generalno najbolji, 
+a ne samo u svakoj pojedinačnoj unutarnjoj petlji?
+
+A: Kao optimalan model odabrati onaj koji je najčešće odabran u k 
+vanjskih preklopa
+
+
+
+Q: Čemu u konačnici odgovara procjena generalizacijske pogreške?
+
+A: Ako se misli na to kako dobiti pogrešku? to Može biti 1- accuracy recimo.
+A ne znam zapravo jebemti.
+
+
+(f)
+Q: Koju hipotezu 𝐻0 i alternativnu hipotezu 𝐻1 testiramo ovim testom?
+
+A: H0 hipoteza je da su točnosti iste.
+   H1 hipoteza je da su točnosti različite.
+
+
+Q: Koja pretpostavka na vjerojatnosnu razdiobu primjera je napravljena u 
+gornjem testu? Je li ona opravdana?
+A: Možda da su podaci zadani sa istom distribucijom?!
+
+
+Q: Koji je model u konačnici bolji i je li ta prednost značajna uz 𝛼=0.05?
+
+A: Mogli bi reći da je model 2 bolji u zadnjem slučaju sa 50 foldova. 
+Razlog tome je što je p_value jako mali. 
+Napomena: Ako je pvalue veći od recimo 0.05 ili 0.1 ne možemo opovrgnuti H0.
+Ako je pvalue manji od tih vrijednosti onda možemo opovrgnuti H0. 
+
+
+
+
+
+############### 3 ###############
+(a)
+Q: Koju biste vrijednost hiperparametra 𝐾 izabrali na temelju ovog grafa? 
+Zašto? Je li taj odabir optimalan? Kako to znate?
+
+A: K=2. To je mjesto koljena, odnosno gdje fukcija krene blaže padati. Ono što se 
+dogodilo u tom trenutku je vjerojatno da smo našli prirodnu podjelu, pa daljnje
+dijeljenje nema prevelikog utjecaja. 
+
+
+Q: Je li ova metoda robusna?
+A: Problem je kada imamo više tih prirodnih grupiranja, tada će funkcija imati
+više koljena. Također, ako su K-središta slučajno uzeta onda je potrebno
+raditi više takvih mjerenja za svaki K i uzeti srednju vrijednost.
+
+
+
+Q: Možemo li izabrati onaj 𝐾 koji minimizira pogrešku 𝐽? Objasnite.
+
+A: Ne možemo, zato što takav model ima K koji je jednak broju primjera, tj 
+svaki model je u svojoj grupi, pa je J = 0.
+
+
+(b)
+Vrijednost a(i) je prosječna udaljenost primjera x(i) do svih drugih primjera 
+iz iste grupe.
+b(i) će biti prosječna udaljenost primjera x(i) do primjera 
+najbliže susjedne grupe.
+Ako je s(i) = 1, to znači da je primjer jako udaljen od primjera iz susjedne 
+grupe, obrnuto ako je s(i)=-1 to znači da je primjer jako loše grupiran jer 
+je bliži primjerima iz druge grupe nego iz svoje grupe. 
+
+Q: Kako biste se gledajući ove slike odlučili za 𝐾?
+
+A: Najbolje je uzeti K za koji je S najveći, s tim da za svaku grupu mora
+vrijediti da je je iznad prosječne vrijednosti S, također poželjno je da 
+su vrijednosti S za pojedinu grupu što sličnije.
+
+
+Q: Koji su problemi ovog pristupa?
+
+A: 
+
+(c)
+Q: Što se dogodilo? Koja je pretpostavka algoritma k-sredina ovdje narušena?
+A: 
+
+
+Q: Što biste morali osigurati kako bi algoritam pronašao ispravne grupe?
+A: 
+
+
+(d)
+Q: Što se dogodilo? Koja je pretpostavka algoritma k-sredina ovdje narušena?
+A: 
+
+
+Q: Što biste morali osigurati kako bi algoritam pronašao ispravne grupe?
+A:
+
+
+(e)
+Q: Što se dogodilo? Koja je pretpostavka algoritma k-sredina ovdje narušena?
+A:
+
+Q: Što biste morali osigurati kako bi algoritam pronašao ispravne grupe?
+A: 
+
+
+
+(g)
+Q: Zašto je Randov indeks pandan točnosti u klasifikacijskim problemima?
+
+A: Mi sa Randovim indeksom gledamo sve parove. Između njih gledamo jesu
+li ta dva para završila u istoj grupi i ako je ta grupa ispravna. Ako jesu 
+onda oni predstavljaju True Positive. Inače ako oba primjera nisu završila 
+u istoj grupi, a ni nisu trebali završit u istoj grupi to nam predstavlja
+True Negative.
+Još jednom:
+"a" predstavlja broj jednako označenih parova u istim grupama, 
+a "b" je broj različito označenih parova u različitim grupama.
+
+
+Q: Koji su glavni problemi ove metrike?
+A: Pa problem je kad nemamo ni jedan označen primjer. Odnosno kad ne znamo
+jesu grupe u kojima su zavržili primjeri točne ili nisu. U tim slučajevima
+možemo neki manji uzorak ručno označiti te tada računati randov indeks.
+
+
+Q: Kako vrednovati kvalitetu grupiranja ako nenamo stvarne oznake primjera? 
+Je li to uopće moguće?
+A: Mislim da je odgovor ovo iznad. Znači da ručno označimo neki manji uzorak,
+pa da po uzoru na to računamo Randov index.hr
